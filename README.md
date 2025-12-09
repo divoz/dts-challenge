@@ -31,7 +31,7 @@ prisma/dev.db
 ```
 app/api/tasks/ → GET, POST
 app/api/tasks/[id]/ → PATCH, DELETE
-app/tasks/ → main page
+app/page/ → main page
 components/ → UI components
 prisma/ → schema + SQLite DB
 types/ → shared types
