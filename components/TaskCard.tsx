@@ -1,17 +1,6 @@
-type Task = {
-  id: number;
-  title: string;
-  description?: string;
-  status: string;
-  dueDate: string;
-  createdAt: string;
-};
+import { HandleSelectChangeType, TaskCardProps } from "@/types/task";
 
-interface TaskCardProps {
-  task: Task;
-}
-
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, load }) => {
   const created = new Date(task.createdAt).toLocaleDateString();
   const dueDate = new Date(task.dueDate).toLocaleDateString();
 
@@ -23,7 +12,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   };
 
   const handleDelete = async (id: number) => {
-    console.log("🚀 ~ id:", id);
     try {
       const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
 
@@ -32,9 +20,30 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         return;
       }
 
-      // You MUST notify the parent to remove the item from UI
-      // but since TaskCard has no parent linking, this only deletes in DB
-      console.log("Deleted");
+      load();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSelectChange: HandleSelectChangeType = async (
+    key,
+    newStatus,
+    id
+  ) => {
+    try {
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: newStatus }),
+      });
+
+      if (!res.ok) {
+        console.error("Failed to update status");
+        return;
+      }
+
+      load(); // refresh UI
     } catch (err) {
       console.error(err);
     }
@@ -76,14 +85,26 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         </div>
 
         <div className="flex justify-between items-center mt-4">
-          <select className="text-xs h-7 px-2 border rounded-md bg-white">
+          <select
+            value={task.level ?? ""}
+            onChange={(e) =>
+              handleSelectChange("level", e.target.value, task.id)
+            }
+            className="text-xs h-7 px-2 border rounded-md bg-white"
+          >
             <option>Low</option>
             <option>Medium</option>
             <option>High</option>
           </select>
 
           <div className="flex items-center gap-2">
-            <select className="text-xs h-7 px-2 border rounded-md bg-white cursor-pointer">
+            <select
+              value={task.status}
+              onChange={(e) =>
+                handleSelectChange("status", e.target.value, task.id)
+              }
+              className="text-xs h-7 px-2 border rounded-md bg-white cursor-pointer"
+            >
               <option value="not-started">Not started</option>
               <option value="working">Working</option>
               <option value="pending">Pending</option>

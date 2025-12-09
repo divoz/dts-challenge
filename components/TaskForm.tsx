@@ -1,18 +1,8 @@
+import { AddTaskFormEvent, AddTaskFormProps, NewTask } from "@/types/task";
 import { useState } from "react";
 
-const AddTaskForm = ({ onClose }: { onClose: () => void }) => {
+const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
   const [loading, setLoading] = useState(false);
-
-  interface NewTask {
-    title: FormDataEntryValue | null;
-    description: FormDataEntryValue | null;
-    dueDate: FormDataEntryValue | null;
-    status: string;
-  }
-
-  interface AddTaskFormEvent extends React.FormEvent<HTMLFormElement> {
-    target: HTMLFormElement;
-  }
 
   const handleSubmit = async (e: AddTaskFormEvent) => {
     e.preventDefault();
@@ -35,8 +25,9 @@ const AddTaskForm = ({ onClose }: { onClose: () => void }) => {
       });
 
       onClose(); // close form
+      load();
     } catch (err) {
-      console.error("❌ AddTaskForm error:", err);
+      console.error("AddTaskForm error:", err);
     } finally {
       setLoading(false);
     }

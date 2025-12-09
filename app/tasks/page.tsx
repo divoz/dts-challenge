@@ -3,34 +3,27 @@
 import { useState, useEffect } from "react";
 import TaskCard from "../../components/TaskCard";
 import AddTaskForm from "../../components/TaskForm";
+import { Task } from "@/types/task";
 
 const TasksPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  type Task = {
-    id: number;
-    title: string;
-    status: string;
-    dueDate: string;
-    createdAt: string;
+  const load = async () => {
+    try {
+      const res = await fetch("/api/tasks", { cache: "no-store" });
+      const body = await res.json();
+      setTasks(body.data || []);
+    } catch (err) {
+      console.error(err);
+      setTasks([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch("/api/tasks", { cache: "no-store" });
-        const body = await res.json();
-        setTasks(body.data || []);
-      } catch (err) {
-        console.error(err);
-        setTasks([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     load();
   }, []);
 
@@ -61,14 +54,16 @@ const TasksPage = () => {
           ) : (
             <div className="flex flex-col gap-4">
               {tasks.map((task: Task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard key={task.id} task={task} load={load} />
               ))}
             </div>
           )}
         </>
       )}
 
-      {showForm && <AddTaskForm onClose={() => setShowForm(false)} />}
+      {showForm && (
+        <AddTaskForm onClose={() => setShowForm(false)} load={load} />
+      )}
     </div>
   );
 };
