@@ -9,6 +9,7 @@ const TasksPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const load = async () => {
     try {
@@ -54,7 +55,15 @@ const TasksPage = () => {
           ) : (
             <div className="flex flex-col gap-4">
               {tasks.map((task: Task) => (
-                <TaskCard key={task.id} task={task} load={load} />
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  load={load}
+                  onEdit={() => {
+                    setEditingTask(task);
+                    setShowForm(true);
+                  }}
+                />
               ))}
             </div>
           )}
@@ -62,7 +71,11 @@ const TasksPage = () => {
       )}
 
       {showForm && (
-        <AddTaskForm onClose={() => setShowForm(false)} load={load} />
+        <AddTaskForm
+          onClose={() => setShowForm(false)}
+          load={load}
+          task={editingTask}
+        />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import { HandleSelectChangeType, TaskCardProps } from "@/types/task";
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, load }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, load, onEdit }) => {
   const created = new Date(task.createdAt).toLocaleDateString();
   const dueDate = new Date(task.dueDate).toLocaleDateString();
 
@@ -92,9 +92,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, load }) => {
             }
             className="text-xs h-7 px-2 border rounded-md bg-white"
           >
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
           </select>
 
           <div className="flex items-center gap-2">
@@ -111,7 +111,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, load }) => {
               <option value="completed">Completed</option>
             </select>
 
-            <button className="text-xs h-7 px-3 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200">
+            <button
+              onClick={onEdit}
+              className="text-xs h-7 px-3 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
               Edit
             </button>
 

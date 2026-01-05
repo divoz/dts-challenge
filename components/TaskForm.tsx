@@ -1,8 +1,9 @@
 import { AddTaskFormEvent, AddTaskFormProps, NewTask } from "@/types/task";
 import { useState } from "react";
 
-const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
+const AddTaskForm = ({ onClose, load, task }: AddTaskFormProps) => {
   const [loading, setLoading] = useState(false);
+  const isEdit = !!task;
 
   const handleSubmit = async (e: AddTaskFormEvent) => {
     e.preventDefault();
@@ -14,12 +15,11 @@ const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
       title: formData.get("title"),
       description: formData.get("description"),
       dueDate: formData.get("dueDate"),
-      status: "not-started",
     };
 
     try {
-      await fetch("/api/tasks", {
-        method: "POST",
+      await fetch(isEdit ? `/api/tasks/${task.id}` : "/api/tasks", {
+        method: isEdit ? "PATCH" : "POST",
         body: JSON.stringify(newTask),
         headers: { "Content-Type": "application/json" },
       });
@@ -43,6 +43,7 @@ const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
         placeholder="Title"
         required
         className="border px-3 py-2 rounded"
+        defaultValue={task?.title ?? ""}
       />
 
       <textarea
@@ -50,6 +51,7 @@ const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
         placeholder="Description"
         className="border px-3 py-2 rounded"
         required
+        defaultValue={task?.description ?? ""}
       />
 
       <input
@@ -57,13 +59,24 @@ const AddTaskForm = ({ onClose, load }: AddTaskFormProps) => {
         name="dueDate"
         className="border px-3 py-2 rounded"
         required
+        defaultValue={
+          task?.dueDate
+            ? new Date(task.dueDate).toISOString().split("T")[0]
+            : ""
+        }
       />
 
       <button
         className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
         disabled={loading}
       >
-        {loading ? "Creating..." : "Create"}
+        {loading
+          ? isEdit
+            ? "Saving..."
+            : "Creating..."
+          : isEdit
+          ? "Save"
+          : "Create"}
       </button>
     </form>
   );
