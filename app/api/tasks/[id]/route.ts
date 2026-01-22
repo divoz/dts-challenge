@@ -1,10 +1,9 @@
 import { TaskPatchInput } from "@/types/task";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
 
@@ -36,7 +35,7 @@ export async function DELETE(
 
 export const PATCH = async (
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) => {
   try {
     const { id } = await context.params;
@@ -69,7 +68,7 @@ export const PATCH = async (
 
     return Response.json(
       { message: "Task updated", data: updatedTask },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("PATCH /tasks error:", error);

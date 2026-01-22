@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export const GET = async () => {
   try {
@@ -14,13 +12,13 @@ export const GET = async () => {
           message: "No tasks found",
           data: [],
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
     return Response.json(
       { message: "Tasks retrieved", data: tasks },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("GET /tasks error:", error);
@@ -51,7 +49,7 @@ export const POST = async (req: Request) => {
 
     return Response.json(
       { message: "Task created", data: task },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("POST /tasks error:", error);
@@ -61,7 +59,7 @@ export const POST = async (req: Request) => {
 
 export const DELETE = async (
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) => {
   try {
     const taskId = parseInt(params.id, 10);
@@ -83,7 +81,7 @@ export const DELETE = async (
 
     return Response.json(
       { message: "Task deleted successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("DELETE /tasks/:id error:", error);
