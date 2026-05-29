@@ -3,7 +3,8 @@
 A small Task Manager built with Next.js + TypeScript + Prisma (SQLite) + Tailwind.
 Supports create, view, update task fields (status, level, etc.), delete task operations.
 
-**Auth system**
+```
+Auth system
 ├── Backend auth primitives
 │ ├── signup
 │ ├── signin
@@ -19,12 +20,10 @@ Supports create, view, update task fields (status, level, etc.), delete task ope
 ├── auth context
 ├── protected routes
 └── login/signup UI
-
----
+```
 
 ### Quick Start
-
-```bash
+```
 git clone https://github.com/divoz/dts-challenge.git
 cd dts-challenge
 npm install
