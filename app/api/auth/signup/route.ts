@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export const POST = async (req: Request) => {
   const { email, name, password } = await req.json();
@@ -31,5 +32,3 @@ export const POST = async (req: Request) => {
     { status: 201 },
   );
 };
-
-

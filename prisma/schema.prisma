@@ -15,6 +15,8 @@ model Task {
   status      String   @default("open")
   dueDate     DateTime?
   createdAt   DateTime @default(now())
+
+  
 }
 
 model User {
@@ -23,5 +25,16 @@ model User {
   password  String
   name      String?
   createdAt DateTime @default(now())
+  sessions Session[] 
 }
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 
