@@ -1,10 +1,10 @@
 import { TaskPatchInput } from "@/types/task";
 import { prisma } from "@/lib/prisma";
 
-export async function DELETE(
+export const DELETE = async (
   req: Request,
   context: { params: Promise<{ id: string }> },
-) {
+) => {
   const { id } = await context.params;
 
   const taskId = Number(id);
@@ -31,7 +31,7 @@ export async function DELETE(
     console.error("DELETE error:", err);
     return Response.json({ error: "Failed to delete" }, { status: 500 });
   }
-}
+};
 
 export const PATCH = async (
   req: Request,

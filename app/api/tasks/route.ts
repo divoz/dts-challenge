@@ -57,34 +57,34 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const DELETE = async (
-  req: Request,
-  { params }: { params: { id: string } },
-) => {
-  try {
-    const taskId = parseInt(params.id, 10);
+// export const DELETE = async (
+//   req: Request,
+//   { params }: { params: { id: string } },
+// ) => {
+//   try {
+//     const taskId = parseInt(params.id, 10);
 
-    if (isNaN(taskId)) {
-      return Response.json({ error: "Invalid task ID" }, { status: 400 });
-    }
+//     if (isNaN(taskId)) {
+//       return Response.json({ error: "Invalid task ID" }, { status: 400 });
+//     }
 
-    // Check if task exists
-    const existing = await prisma.task.findUnique({
-      where: { id: taskId },
-    });
+//     // Check if task exists
+//     const existing = await prisma.task.findUnique({
+//       where: { id: taskId },
+//     });
 
-    if (!existing) {
-      return Response.json({ error: "Task not found" }, { status: 404 });
-    }
+//     if (!existing) {
+//       return Response.json({ error: "Task not found" }, { status: 404 });
+//     }
 
-    await prisma.task.delete({ where: { id: taskId } });
+//     await prisma.task.delete({ where: { id: taskId } });
 
-    return Response.json(
-      { message: "Task deleted successfully" },
-      { status: 200 },
-    );
-  } catch (error) {
-    console.error("DELETE /tasks/:id error:", error);
-    return Response.json({ error: "Failed to delete task" }, { status: 500 });
-  }
-};
+//     return Response.json(
+//       { message: "Task deleted successfully" },
+//       { status: 200 },
+//     );
+//   } catch (error) {
+//     console.error("DELETE /tasks/:id error:", error);
+//     return Response.json({ error: "Failed to delete task" }, { status: 500 });
+//   }
+// };
