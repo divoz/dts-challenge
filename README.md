@@ -3,23 +3,22 @@
 A small Task Manager built with Next.js + TypeScript + Prisma (SQLite) + Tailwind.
 Supports create, view, update task fields (status, level, etc.), delete task operations.
 
+### Deployment & Infrastructure
 ```
-Auth system
-├── Backend auth primitives
-│ ├── signup
-│ ├── signin
-│ ├── signout
-│ └── auth middleware
-│
-├── Session handling
-│ ├── cookies
-│ ├── httpOnly
-│ └── secure flags
-│
-└── Frontend integration
-├── auth context
-├── protected routes
-└── login/signup UI
+Deployed and managed on AWS EC2.
+
+Hands-on experience with:
+EC2 instance setup
+SSH access to Linux servers
+Application deployment
+
+Architecture
+GitHub
+   │
+   ▼
+AWS EC2 (Linux)
+   │
+   └── Next.js → Prisma → SQLite
 ```
 
 ### Quick Start
@@ -49,25 +48,12 @@ prisma/dev.db
 ```
 app/api/tasks/ → GET, POST
 app/api/tasks/[id]/ → PATCH, DELETE
+/api/auth/signin  → POST
+/api/auth/signup  → POST
+/api/auth/signout  → POST
 app/page/ → main page
 components/ → UI components
 prisma/ → schema + SQLite DB
 types/ → shared types
 ```
 
-### 🔌API Endpoints
-
-```
-| Method | Route           | Action        |
-|--------|-----------------|---------------|
-| GET    | /api/tasks      | Fetch tasks   |
-| POST   | /api/tasks      | Create task   |
-| PATCH  | /api/tasks/:id  | Update task   |
-| DELETE | /api/tasks/:id  | Delete task   |
-```
-
-```
-| POST   | /api/auth/signin | Log in  |
-| POST   | /api/auth/signup | Sign up |
-| POST   | /api/auth/signout| Sign out|
-```
