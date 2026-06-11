@@ -22,38 +22,34 @@ AWS EC2 (Linux)
 ```
 
 ### Quick Start
-```
+
+```bash
 git clone https://github.com/divoz/task-manager.git
 cd task-manager
 npm install
-npx prisma migrate dev  # creates Prisma Client + prisma/dev.db file
+
+# Add .env file
+DATABASE_URL="file:./dev.db"
+
+npx prisma migrate dev
 npm run dev
 ```
 
-Open the app: http://localhost:3000/tasks
+→ http://localhost:3000/tasks
 
-### Database
 
-Uses SQLite stored at:
-
-```
-prisma/dev.db
-```
-
-> _**\*View/edit** it with any **SQLite viewer** (e.g., VS Code SQLite Viewer).`</br>`
-> No .env needed, Prisma uses the default config: `</br>` > **url = "file:./dev.db"** \*_
 
 ### 📁 Structure
 
-```
-app/api/tasks/ → GET, POST
-app/api/tasks/[id]/ → PATCH, DELETE
-/api/auth/signin  → POST
-/api/auth/signup  → POST
-/api/auth/signout  → POST
-app/page/ → main page
-components/ → UI components
-prisma/ → schema + SQLite DB
-types/ → shared types
+```text
+app/
+├─ api/
+│  ├─ tasks/       → CRUD endpoints
+│  └─ auth/        → signin, signup, signout
+├─ page.tsx        → main page
+
+components/        → UI components
+prisma/            → schema + SQLite DB
+types/             → shared types
 ```
 
