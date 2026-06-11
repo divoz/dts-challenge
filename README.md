@@ -23,8 +23,8 @@ AWS EC2 (Linux)
 
 ### Quick Start
 ```
-git clone https://github.com/divoz/dts-challenge.git
-cd dts-challenge
+git clone https://github.com/divoz/task-manager.git
+cd task-manager
 npm install
 npx prisma migrate dev  # creates Prisma Client + prisma/dev.db file
 npm run dev
