@@ -35,7 +35,7 @@ npx prisma migrate dev
 npm run dev
 ```
 
-→ http://localhost:3000/tasks
+→ http://localhost:3000
 
 
 
