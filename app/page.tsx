@@ -10,6 +10,15 @@ const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const openNewTaskForm = () => {
+    setEditingTask(null);
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingTask(null);
+  };
 
   const load = async () => {
     try {
@@ -36,7 +45,13 @@ const TasksPage = () => {
 
         <button
           className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            if (showForm) {
+              closeForm();
+            } else {
+              openNewTaskForm();
+            }
+          }}
         >
           {showForm ? "Cancel" : "+ Add Task"}
         </button>
@@ -72,7 +87,7 @@ const TasksPage = () => {
 
       {showForm && (
         <AddTaskForm
-          onClose={() => setShowForm(false)}
+          onClose={closeForm}
           load={load}
           task={editingTask}
         />
