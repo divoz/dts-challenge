@@ -2,10 +2,6 @@ import * as cdk from "aws-cdk-lib";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 import * as iam from "aws-cdk-lib/aws-iam";
-import * as ecs from "aws-cdk-lib/aws-ecs";
-import * as ecsPatterns from "aws-cdk-lib/aws-ecs-patterns";
-import * as ecr from "aws-cdk-lib/aws-ecr";
-import * as ssm from "aws-cdk-lib/aws-ssm";
 
 export class InfrastructureStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -13,9 +9,6 @@ export class InfrastructureStack extends cdk.Stack {
 
     const vpc = ec2.Vpc.fromLookup(this, "DefaultVpc", {
       isDefault: true,
-    });
-    const cluster = new ecs.Cluster(this, "TaskManagerCluster", {
-      vpc,
     });
 
     const securityGroup = new ec2.SecurityGroup(this, "TaskManagerSG", {
@@ -51,41 +44,5 @@ export class InfrastructureStack extends cdk.Stack {
       keyName: "task-manager-key",
       role: instanceRole,
     });
-    // Reference an existing ECR repository named 'task-manager'
-    const repository = ecr.Repository.fromRepositoryName(
-      this,
-      "TaskManagerRepo",
-      "task-manager",
-    );
-    const databaseUrl = ssm.StringParameter.fromSecureStringParameterAttributes(
-      this,
-      "DatabaseUrl",
-      {
-        parameterName: "/task-manager/database-url",
-      },
-    );
-    const fargateService =
-      new ecsPatterns.ApplicationLoadBalancedFargateService(
-        this,
-        "TaskManagerFargate",
-        {
-          cluster,
-          assignPublicIp: true,
-          cpu: 256,
-          memoryLimitMiB: 512,
-          desiredCount: 1,
-
-          taskImageOptions: {
-            image: ecs.ContainerImage.fromEcrRepository(repository, "latest"),
-            containerPort: 3000,
-            secrets: {
-              DATABASE_URL: ecs.Secret.fromSsmParameter(databaseUrl),
-            },
-          },
-
-          publicLoadBalancer: true,
-        },
-      );
-    databaseUrl.grantRead(fargateService.taskDefinition.taskRole);
   }
 }
